@@ -2,18 +2,17 @@ function InformationPanel_C2S(fig)
 
 data = guidata(fig);
 
-FileLoadStatusUIGroup = uipanel(data.source, 'Title','Status',...
-    'TitlePosition','centertop','Position',[0.41,0.445,0.065808287795993,0.36],...
+FileLoadStatusUIGroup = uipanel(data.source, 'Title','',...
+    'TitlePosition','centertop','Position',[0.03, 0.44, 0.03, 0.35],...
     'BackgroundColor','white');
 
-
-stringLabels = {'Save Location Specified', 'MESc file selected',...
-    'Layer selected','Fall file selected'};
+stringLabels = {'Save Location Specified', 'MESc file selected'};
+    % 'Layer selected','Fall file selected'};
 
 %checkmarks
 leftMargin = 0.3;
-bottomMargin = 0.85;
-height = 0.12;
+bottomMargin = 0.79;
+height = 0.1;
 width = 0.4;
 step = 0;
 
@@ -40,7 +39,7 @@ for labelIndex = 1:numel(stringLabels)
     
     data.GUI.checkmarks.graphics.(tag) = checkmarks(labelIndex);
     
-    step = step + 2;
+    step = step + 3.7;
 end
 
 guidata(fig, data);
