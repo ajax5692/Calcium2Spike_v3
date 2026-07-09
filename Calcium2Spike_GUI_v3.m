@@ -12,8 +12,8 @@ end
 figureCalcium2Spike_GUI = figure;
 set(figureCalcium2Spike_GUI,'units', 'normalized',...
     'position', [0.1 0.1 0.7 0.7], 'Color', [0.6 0.6 0.6],...
-    'NumberTitle', 'off', 'Name', 'Calcium2Spike_GUI','Resize','off');
-    % 'MenuBar', 'none');
+    'NumberTitle', 'off', 'Name', 'Calcium2Spike_GUI','Resize','off',...
+    'MenuBar', 'none');
 
 
 %initializing data that will be embedded in the figure
@@ -129,7 +129,7 @@ UISet_C2S(generalTB(3), 'Tag', 'MEScFileSelectionCheckmark');
 
 PB(3) = GenericPushButton(MEScUIGroup);
 UISet_C2S(PB(3), 'String', 'Browse');
-UISet_C2S(PB(3), 'Position', [0.05,0.736551724137952,0.10045025728988,0.213793103448275]);
+UISet_C2S(PB(3), 'Position', [0.05,0.75,0.10045025728988,0.18]);
 UISet_C2S(PB(3), 'Enable', 'off');
 UISet_C2S(PB(3), 'Callback', @callback_SelectMEScFile_C2S);
 UISet_C2S(PB(3), 'Tag', 'SelectMEScFile');
@@ -141,6 +141,25 @@ UISet_C2S(generalTB(4), 'HorizontalAlignment', 'left');
 UISet_C2S(generalTB(4), 'ForeGroundColor', [0.4 0.4 0.4]);
 UISet_C2S(generalTB(4), 'BackGroundColor', [0.75 0.75 0.75]);
 UISet_C2S(generalTB(4), 'Tag', 'MEScFileLocationPathTB');
+
+%reference MESc unit for calculation
+generalTB(20) = GenericTextBox(MEScUIGroup);
+UISet_C2S(generalTB(20), 'Position', [0.775,0.85,0.974271012006861,0.143708145927016]);
+UISet_C2S(generalTB(20), 'String', 'Ref. measurement unit');
+UISet_C2S(generalTB(20), 'HorizontalAlignment', 'left');
+UISet_C2S(generalTB(20), 'ForeGroundColor', [0.4 0.4 0.4]);
+UISet_C2S(generalTB(20), 'BackGroundColor', [0.75 0.75 0.75]);
+UISet_C2S(generalTB(20), 'Tag', 'MEScRefUnitTB');
+
+%MESc ref. unit selection editable textbox
+EB(1) = GenericEditBox(MEScUIGroup);
+UISet_C2S(EB(1), 'String', '50');
+UISet_C2S(EB(1), 'Position', [0.93,0.7,0.05,0.15]);
+UISet_C2S(EB(1), 'Enable', 'off');
+UISet_C2S(EB(1), 'Tag', 'SetMEScRefUnitEB');
+UISet_C2S(EB(1), 'TooltipString', ['Enter the unit number recorded in MESC ' ...
+    'to be considered for calculating imaging parameters like frame-rate,' ...
+    ' number of planes etc. Default value=50']);
 
 MEScParamsUIGroup = uipanel('Title','MESc Params',...
     'FontSize', 10, ...
@@ -289,11 +308,11 @@ AnalysisUIGroup = uipanel('Title','Analysis',...
     'ShadowColor','w');
 
 % - 3a. OASIS threshold editable textbox
-EB(1) = GenericEditBox(AnalysisUIGroup);
-UISet_C2S(EB(1), 'String', '0');
-UISet_C2S(EB(1), 'Position', [0.01,0.62,0.05,0.25]);
-UISet_C2S(EB(1), 'Enable', 'off');
-UISet_C2S(EB(1), 'Tag', 'SetOASISthresholdEB');
+EB(2) = GenericEditBox(AnalysisUIGroup);
+UISet_C2S(EB(2), 'String', '0');
+UISet_C2S(EB(2), 'Position', [0.01,0.62,0.05,0.25]);
+UISet_C2S(EB(2), 'Enable', 'off');
+UISet_C2S(EB(2), 'Tag', 'SetOASISthresholdEB');
 
 generalTB(14) = GenericTextBox(AnalysisUIGroup);
 UISet_C2S(generalTB(14), 'String', sprintf('Set OASIS threshold\n(default 0)'));
@@ -325,9 +344,9 @@ UISet_C2S(PB(6), 'Enable', 'off');
 UISet_C2S(PB(6), 'Callback', @callback_PoolData_C2S);
 
 % - 3c. Core analysis space card
-CoreAnalysisUIGroup = uipanel('Title','',...
+CoreAnalysisUIGroup = uipanel('Title','CoreAnalysis',...
     'FontSize', 10, ...
-    'ForegroundColor',[0.3 0.3 0.3],...
+    'ForegroundColor',[0.75 0.75 0.75],...
     'Position',[0.25,0.13,0.718,0.19],'BackgroundColor',[0.75 0.75 0.75],...
     'BorderType','line',...
     'BorderColor',[0.75 0.75 0.75],...
@@ -336,14 +355,14 @@ CoreAnalysisUIGroup = uipanel('Title','',...
 % - 3c.i. Run analysis button
 PB(5) = GenericPushButton(CoreAnalysisUIGroup);
 UISet_C2S(PB(5), 'String', 'Run analysis');
-UISet_C2S(PB(5), 'Position', [0.015,0.62,0.1,0.25]);
+UISet_C2S(PB(5), 'Position', [0.015,0.75,0.1,0.25]);
 UISet_C2S(PB(5), 'Enable', 'off');
 UISet_C2S(PB(5), 'Tag', 'RunAnalysisPB');
 UISet_C2S(PB(5), 'Callback', @callback_CoreAnalysis_C2S);
 
 % - 3c.ii. Create the primary progress bar
 pbAxes1 = axes(CoreAnalysisUIGroup,'Units', 'normalized', ...
-    'Position', [0.18 0.8 0.55 0.1], ...
+    'Position', [0.18 0.9 0.55 0.1], ...
     'XLim', [0 1], ...
     'YLim', [0 1], ...
     'XTick', [], ...
@@ -361,7 +380,7 @@ guidata(figureCalcium2Spike_GUI, data);
 
 % - 3c.iii. Primary progessbar "console"
 primaryPBconsole = GenericTextBox(CoreAnalysisUIGroup);
-UISet_C2S(primaryPBconsole, 'Position', [0.74 0.79 0.1 0.12]);
+UISet_C2S(primaryPBconsole, 'Position', [0.74 0.89 0.1 0.12]);
 UISet_C2S(primaryPBconsole, 'String', 'Overall progress');
 UISet_C2S(primaryPBconsole, 'ForeGroundColor',[0 0 0]);
 UISet_C2S(primaryPBconsole, 'BackGroundColor', [0.75 0.75 0.75]);
@@ -374,7 +393,7 @@ guidata(figureCalcium2Spike_GUI, data);
 
 % - 3c.iv. Create the secondary progress bar
 pbAxes2 = axes(CoreAnalysisUIGroup,'Units', 'normalized', ...
-    'Position', [0.18 0.6 0.55 0.1], ...
+    'Position', [0.18 0.7 0.55 0.1], ...
     'XLim', [0 1], ...
     'YLim', [0 1], ...
     'XTick', [], ...
@@ -392,7 +411,7 @@ guidata(figureCalcium2Spike_GUI, data);
 
 % - 3c.v. Secondary progessbar "console"
 secondaryPBconsole = GenericTextBox(CoreAnalysisUIGroup);
-UISet_C2S(secondaryPBconsole, 'Position', [0.74 0.59 0.25 0.12]);
+UISet_C2S(secondaryPBconsole, 'Position', [0.74 0.68 0.25 0.13]);
 UISet_C2S(secondaryPBconsole, 'String', 'Running Step: --');
 UISet_C2S(secondaryPBconsole, 'ForegroundColor',[0 0 0]);
 UISet_C2S(secondaryPBconsole, 'BackGroundColor', [0.75 0.75 0.75]);

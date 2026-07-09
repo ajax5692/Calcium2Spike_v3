@@ -3,7 +3,8 @@ function callback_SpecifySaveLocation_C2S(hO, ed)
 figureCalcium2Spike_GUI = ancestor(hO,'figure');      % get figure that owns guidata
 d = guidata(hO);
 
-saveDirectory = uigetdir('C:\Users\abhrajyoti.chakrabarti\Desktop\testNewGUI\','Please specify location where to save the results');
+saveDirectory = uigetdir('C:\Users\abhrajyoti.chakrabarti\Desktop\testNewGUI\',...
+    'Please specify location where to save the results');
 
 try
     if saveDirectory ~= 0
@@ -21,7 +22,15 @@ try
         UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'on');
         %update checkmark color
         childrenArray = GUI_childrenFinder_C2S(d,'Save location','SaveLocationPathCheckmark');
-        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'ForegroundColor',[0.21 0.70 0.21]);
+        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
+            'ForegroundColor',[0.21 0.70 0.21]);
+        % - mesc space card
+        %enable MESc browse PB
+        childrenArray = GUI_childrenFinder_C2S(d,'MESc file','SelectMEScFile');
+        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'on');  
+        %enable MESc ref. unit EB
+        childrenArray = GUI_childrenFinder_C2S(d,'MESc file','SetMEScRefUnitEB');
+        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'on');
         %change directory and create folder to store analyzed data
         cd(d.saveAnalyzedData)
         mkdir('AnalyzedCalciumToSpikeData')
@@ -41,7 +50,8 @@ try
         UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off');
         %update checkmark color
         childrenArray = GUI_childrenFinder_C2S(d,'Save location','SaveLocationPathCheckmark');
-        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'ForegroundColor',[0.9 0.3 0.3]);
+        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
+            'ForegroundColor',[0.9 0.3 0.3]);
         % - mesc space card
         %disable MESc browse PB
         childrenArray = GUI_childrenFinder_C2S(d,'MESc file','SelectMEScFile');
@@ -52,7 +62,11 @@ try
             'No MESc file selected');
         %update checkmark color
         childrenArray = GUI_childrenFinder_C2S(d,'MESc file','MEScFileSelectionCheckmark');
-        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'ForegroundColor',[0.9 0.3 0.3]);
+        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
+            'ForegroundColor',[0.9 0.3 0.3]);
+        %disable MESc ref. unit EB
+        childrenArray = GUI_childrenFinder_C2S(d,'MESc file','SetMEScRefUnitEB');
+        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off');
         % - update MESc params space card
         %framerate TB
         childrenArray = GUI_childrenFinder_C2S(d,'MESc Params','MEScFramerateTB');
@@ -80,7 +94,8 @@ try
             'No layers analyzed yet');
         %update checkmark color
         childrenArray = GUI_childrenFinder_C2S(d,'Layer selection','LayerSelectionCheckmark');
-        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'ForegroundColor',[0.9 0.3 0.3]);
+        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
+            'ForegroundColor',[0.9 0.3 0.3]);
         % - suite2p Fall space card
         %disable pushbutton
         childrenArray = GUI_childrenFinder_C2S(d,'Suite2p Fall.mat file','FallSelectionPB');
@@ -91,7 +106,8 @@ try
             'No file selected');
         %update checkmark color
         childrenArray = GUI_childrenFinder_C2S(d,'Suite2p Fall.mat file','FallCheckmark');
-        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'ForegroundColor',[0.9 0.3 0.3]);
+        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
+            'ForegroundColor',[0.9 0.3 0.3]);
         % - update Fall params space card
         %no. of ROIs
         childrenArray = GUI_childrenFinder_C2S(d,'Fall.mat Params','FallROInumTB');
@@ -107,7 +123,7 @@ try
         UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable','off');
         % - update core analysis space card
         %disable run analysis PB
-        childrenArray = GUI_childrenFinder_C2S(d,'AnalysisResultUIGroup','RunAnalysisPB');
+        childrenArray = GUI_childrenFinder_C2S(d,'CoreAnalysis','RunAnalysisPB');
         UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off',...
             'BackgroundColor', 'w', 'ForegroundColor', 'k', 'FontWeight', 'normal', 'FontWeight',...
             'normal', 'FontSize', 10);
