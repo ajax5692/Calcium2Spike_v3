@@ -8,50 +8,57 @@ load(strcat(d.FallDataPath,d.FallFilename))
 cellCounter = 1;
 count = 0;
 
-for cellIndex = 1:size(stat,2)
+try
+    for cellIndex = 1:size(stat,2)
 
 
-    if isCell(cellIndex,1) == 1
+        if isCell(cellIndex,1) == 1
 
-        count = count + 1;
+            count = count + 1;
 
-        if 4*std(d.PSNR) > min(d.PSNR)
+            if 4*std(d.PSNR) > min(d.PSNR)
 
-            if d.PSNR(count) > 18 & d.PSNR(count) < 4*std(d.PSNR)
+                if d.PSNR(count) > 18 & d.PSNR(count) < 4*std(d.PSNR)
 
-                xCoord(cellCounter) = double(stat{1,cellIndex}.med(1,1));
-                yCoord(cellCounter) = double(stat{1,cellIndex}.med(1,2));
+                    xCoord(cellCounter) = double(stat{1,cellIndex}.med(1,1));
+                    yCoord(cellCounter) = double(stat{1,cellIndex}.med(1,2));
 
-                cellCounter = cellCounter + 1;
+                    cellCounter = cellCounter + 1;
 
-            elseif d.PSNR(count) > 18
+                elseif d.PSNR(count) > 18
 
-                xCoord(cellCounter) = double(stat{1,cellIndex}.med(1,1));
-                yCoord(cellCounter) = double(stat{1,cellIndex}.med(1,2));
+                    xCoord(cellCounter) = double(stat{1,cellIndex}.med(1,1));
+                    yCoord(cellCounter) = double(stat{1,cellIndex}.med(1,2));
 
-                cellCounter = cellCounter + 1;
+                    cellCounter = cellCounter + 1;
+
+                else
+                    continue
+                end
 
             else
-                continue
+
+                if d.PSNR(count) > 18
+
+                    xCoord(cellCounter) = double(stat{1,cellIndex}.med(1,1));
+                    yCoord(cellCounter) = double(stat{1,cellIndex}.med(1,2));
+
+                    cellCounter = cellCounter + 1;
+
+                else
+                    continue
+                end
+
             end
 
         else
-
-            if d.PSNR(count) > 18
-
-                xCoord(cellCounter) = double(stat{1,cellIndex}.med(1,1));
-                yCoord(cellCounter) = double(stat{1,cellIndex}.med(1,2));
-
-                cellCounter = cellCounter + 1;
-
-            else
-                continue
-            end
-
+            continue
         end
 
-    else
-        continue
     end
 
+catch
+    %pop-up msgbox
+    beep;
+    CustomMsgBox_C2S(sprintf('Coordinate export from Suite2p\nencountered an error.'));
 end

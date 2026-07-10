@@ -15,56 +15,66 @@ timeStamp = (1:numel(F(1,:))).*(1/frameRate); %This is in seconds
 newCounter = 0;
 
 PSNR = d.PSNR;
-childrenArray = GUI_childrenFinder_C2S(d,'','secondaryPBconsole');
+childrenArray = GUI_childrenFinder_C2S(d,'CoreAnalysis','secondaryPBconsole');
 
-for cellIndex = 1:size(F,1)
+try
+    for cellIndex = 1:size(F,1)
 
-    d.source.Children(childrenArray).String = 'Step 2/3: ΔF/F';
-    UpdateProgressbar(d,'progressbar_secondary', [1 0 0], cellIndex/size(F,1));
-    pause(0.05)
+        set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),'String','Step 2/3: ΔF/F');
+        UpdateProgressbar(d,'progressbar_secondary', [1 0 0], cellIndex/size(F,1));
+        pause(0.05)
 
-    if isCell(cellIndex,1) == 1
+        if isCell(cellIndex,1) == 1
 
-        newCounter = newCounter + 1;
+            newCounter = newCounter + 1;
 
-        %Applying PSNR filter. PSNR minimum value sould be 18dB and maximum value should not exceed 4 SD value
+            %Applying PSNR filter. PSNR minimum value sould be 18dB and maximum value should not exceed 4 SD value
 
-        if 4*std(PSNR) > min(PSNR) %This is to prevent the code from crashing if the 4SD value is smaller than the min(PSNR) value
+            if 4*std(PSNR) > min(PSNR) %This is to prevent the code from crashing if the 4SD value is smaller than the min(PSNR) value
 
-            if PSNR(newCounter) > 18 & PSNR(newCounter) < 4*std(PSNR) %Here the actual PSNR range bound filtering takes place
+                if PSNR(newCounter) > 18 & PSNR(newCounter) < 4*std(PSNR) %Here the actual PSNR range bound filtering takes place
 
-                neuropilSubtractedFluor = F(cellIndex,:) - 0.7*Fneu(cellIndex,:); %70 percent of neuropil subtracted
-                [LONG_KERNEL_COEFF, SHORT_KERNEL_COEFF] = CalculateKernelCoeffsForDff_C2S(neuropilSubtractedFluor,frameRate);
-                deltaff(newCounter,:) = CalculateDff_C2S(timeStamp,neuropilSubtractedFluor,'median',LONG_KERNEL_COEFF,SHORT_KERNEL_COEFF);
+                    neuropilSubtractedFluor = F(cellIndex,:) - 0.7*Fneu(cellIndex,:); %70 percent of neuropil subtracted
+                    [LONG_KERNEL_COEFF, SHORT_KERNEL_COEFF] = CalculateKernelCoeffsForDff_C2S(neuropilSubtractedFluor,frameRate);
+                    deltaff(newCounter,:) = CalculateDff_C2S(timeStamp,neuropilSubtractedFluor,'median',LONG_KERNEL_COEFF,SHORT_KERNEL_COEFF);
 
-            elseif PSNR(newCounter) > 18 %This happens if the upper limit of 4SD PSNR cannot be applied
+                elseif PSNR(newCounter) > 18 %This happens if the upper limit of 4SD PSNR cannot be applied
 
-                neuropilSubtractedFluor = F(cellIndex,:) - 0.7*Fneu(cellIndex,:); %70 percent of neuropil subtracted
-                [LONG_KERNEL_COEFF, SHORT_KERNEL_COEFF] = CalculateKernelCoeffsForDff_C2S(neuropilSubtractedFluor,frameRate);
-                deltaff(newCounter,:) = CalculateDff_C2S(timeStamp,neuropilSubtractedFluor,'median',LONG_KERNEL_COEFF,SHORT_KERNEL_COEFF);
+                    neuropilSubtractedFluor = F(cellIndex,:) - 0.7*Fneu(cellIndex,:); %70 percent of neuropil subtracted
+                    [LONG_KERNEL_COEFF, SHORT_KERNEL_COEFF] = CalculateKernelCoeffsForDff_C2S(neuropilSubtractedFluor,frameRate);
+                    deltaff(newCounter,:) = CalculateDff_C2S(timeStamp,neuropilSubtractedFluor,'median',LONG_KERNEL_COEFF,SHORT_KERNEL_COEFF);
 
-            else %This step means no cell fulfilled the PSNR criteria and hence needs to be omitted for analysis
-                continue
+                else %This step means no cell fulfilled the PSNR criteria and hence needs to be omitted for analysis
+                    continue
+                end
+
+            else %This step means the 4SD value is smaller than the min(PSNR) value
+
+                if PSNR(newCounter) > 18 %This happens if the upper limit of 4SD PSNR cannot be applied
+
+                    neuropilSubtractedFluor = F(cellIndex,:) - 0.7*Fneu(cellIndex,:); %70 percent of neuropil subtracted
+                    [LONG_KERNEL_COEFF, SHORT_KERNEL_COEFF] = CalculateKernelCoeffsForDff_C2S(neuropilSubtractedFluor,frameRate);
+                    deltaff(newCounter,:) = CalculateDff_C2S(timeStamp,neuropilSubtractedFluor,'median',LONG_KERNEL_COEFF,SHORT_KERNEL_COEFF);
+
+                else %This step means no cell fulfilled the PSNR criteria and hence needs to be omitted from analysis
+                    continue
+                end
+
             end
 
-        else %This step means the 4SD value is smaller than the min(PSNR) value
-
-            if PSNR(newCounter) > 18 %This happens if the upper limit of 4SD PSNR cannot be applied
-
-                neuropilSubtractedFluor = F(cellIndex,:) - 0.7*Fneu(cellIndex,:); %70 percent of neuropil subtracted
-                [LONG_KERNEL_COEFF, SHORT_KERNEL_COEFF] = CalculateKernelCoeffsForDff_C2S(neuropilSubtractedFluor,frameRate);
-                deltaff(newCounter,:) = CalculateDff_C2S(timeStamp,neuropilSubtractedFluor,'median',LONG_KERNEL_COEFF,SHORT_KERNEL_COEFF);
-
-            else %This step means no cell fulfilled the PSNR criteria and hence needs to be omitted from analysis
-                continue
-            end
-
+        else %If cell detection criteria is not met, the cell is omitted from analysis
+            continue
         end
 
-    else %If cell detection criteria is not met, the cell is omitted from analysis
-        continue
     end
-
+catch
+    d = ToError(d, "Error in ΔF/F calculation");
+    set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
+        'ForegroundColor',[0.64 0.08 0.18]);
+    d = ToLog(d, "Analysis interrupted");
+    %pop-up msgbox
+    beep;
+    CustomMsgBox_C2S(sprintf('Analysis interrupted due to\nΔF/F calculation error.'));
 end
 
 

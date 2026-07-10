@@ -9,7 +9,7 @@ d = guidata(hO);
 if mescDataName ~= 0
     d.mescDataName = mescDataName;
     d.mescDataLocation = mescDataLocation;
-    d = ToError(d, " No errors");
+    d = ToError(d, "No errors");
     set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
             'ForegroundColor',[0.64 0.08 0.18]);
     d = ToLog(d, "MESc file successfully selected");
@@ -71,15 +71,12 @@ if mescDataName ~= 0
     set(dropdownHandle, 'String', dynamicLayerList);
     
 else
-    d = ToError(d, " MESc file selection interrupted by user");
+    d = ToError(d, "MESc file selection interrupted by user");
     set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
             'ForegroundColor',[0.64 0.08 0.18]);
     %pop-up msgbox
     beep;
-    f = msgbox("MESc file selection interrupted!","Error","warn");
-    textObj = findobj(f, 'Type', 'text');
-    set(textObj, 'FontSize', 10, 'FontWeight', 'bold');
-    set(f,'units','normalized','Position',[1.47 0.613 0.16 0.0765]);
+    CustomMsgBox_C2S(sprintf('MESc file selection\ninterrupted by user!'));
     % - mesc space card
         %reset MESc filepath text
         childrenArray = GUI_childrenFinder_C2S(d,'MESc file','MEScFileLocationPathTB');

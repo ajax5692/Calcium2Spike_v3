@@ -6,27 +6,42 @@ d = guidata(hO);
 totalAnalysisSteps = 3;
 
 if isempty(d.layers.analyzedLayers) == 1 %when gui is run first time
-    childrenArray = GUI_childrenFinder_C2S(d,'Layer-wise analysis','RunAnalysis');
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'BackgroundColor', [1 1 1]);
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'FontWeight', 'bold');
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'ForegroundColor', [1 0 0]);
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'FontSize', 12);
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', 'Analyzing');
+    d = ToError(d, "No errors");
+    d = ToLog(d, "--");
+    set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
+        'ForegroundColor',[0.64 0.08 0.18]);
+    childrenArray = GUI_childrenFinder_C2S(d,'CoreAnalysis','RunAnalysisPB');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'BackgroundColor', [1 1 1],...
+        'FontWeight', 'bold','ForegroundColor', [1 0 0],'FontSize', 12, 'String', 'Analyzing');
 
     gif = sprintf(['<html><img src="file:/%s\\Spinner@1x-1.0s-50px-50px.gif" ' 'width="40" height="40"></html>'], pwd);
-    loadingGraphics = uicontrol('style','push', 'pos',[540 168 40 40], 'String',gif,'enable','inactive','CData',uint8(153*ones(40,40,3))); % Use an inactive (not disabled) pushbutton to display the gif. Use CData instead of background color to flatten.
-
+    %use an inactive (not disabled) pushbutton to display the gif. Use CData instead of background color to flatten.
+    loadingGraphics = uicontrol('style','push', 'pos',[460 187 40 40], 'String',gif,'enable','inactive','CData',...
+        uint8(255*ones(40,40,3)*0.75));
     pause(0.5);
     UpdateProgressbar(d,'progressbar_primary', [0 0 1], 1/totalAnalysisSteps);
 
+    %calculate neuronal response PSNR
     d.PSNR = CalculatePSNR_C2S(d);
-    d.Values.TBDynamic(1).String = num2str(size(d.PSNR,2));
+    lowPSNRcount = sum(d.PSNR<18);
+    %update PSNR filter TB
+    childrenArray = GUI_childrenFinder_C2S(d,'Analysis Output','PSNRfilterTB');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),'String',...
+        strcat('Neurons filtered due to low PSNR:',{' '},num2str(lowPSNRcount)));
+    %update suite2p total neuron TB
+    childrenArray = GUI_childrenFinder_C2S(d,'Analysis Output','DffCountTB');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),'String',...
+        strcat('Total neurons in suite2p output:',{' '},num2str(size(d.PSNR,2))));
+    %update final saved df/f neuron TB
+    childrenArray = GUI_childrenFinder_C2S(d,'Analysis Output','DffSavedUnitsTB');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),'String',...
+        strcat('Final number of neurons for which ΔF/F saved:',{' '},num2str(size(d.PSNR,2)-lowPSNRcount)));
 
-
+    %calculate df/f
     deltaff = RunDff_C2S(d);
-    d.Values.TBDynamic(5).String = num2str(size(deltaff,1));
     UpdateProgressbar(d,'progressbar_primary', [0 0 1], 2/totalAnalysisSteps);
 
+    %calculate spikes
     populationSpikeMatrix = GenerateBinarySpikeMatrixByOASIS_C2S(d,deltaff);
     [xCoord,yCoord] = Suite2pRoiCoordinateExporter_C2S(d);
     UpdateProgressbar(d,'progressbar_primary', [0 0 1], 3/totalAnalysisSteps);
@@ -40,39 +55,54 @@ if isempty(d.layers.analyzedLayers) == 1 %when gui is run first time
     delete(loadingGraphics)
 
     cd(d.originalCodePath)
-    childrenArray = GUI_childrenFinder_C2S(d,'Layer-wise analysis','RunAnalysis');
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off');
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'BackgroundColor', [1 1 1]);
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'FontWeight', 'bold');
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'FontSize', 12);
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', 'Finished');
+    %if analysis successfully run, then disable run analysis PB
+    childrenArray = GUI_childrenFinder_C2S(d,'CoreAnalysis','RunAnalysisPB');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
+        'BackgroundColor', 'w', 'ForegroundColor', [0.5 0.5 0.5]',...
+        'FontWeight', 'bold', 'FontSize', 10, 'String','Finished');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),'Enable','inactive');
     d = ToLog(d, "Analysis successful! Data Saved.");
-
-    d.layers.analyzedLayers = [d.layers.analyzedLayers,d.layers.currentLayer];
-    d.Values.TBDynamic(6).String = num2str(d.layers.analyzedLayers);
-
+    %pop-up msgbox
+    beep;
+    CustomMsgBox_C2S(sprintf('Analysis run successfully.'));
+    %update layer selection analyzed layer TB
+    d.layers.analyzedLayers = d.layers.currentLayer;
+    childrenArray = GUI_childrenFinder_C2S(d,'Layer selection','AnalyzedLayerTB');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),'String',...
+        strcat('Completely analyzed layers:',{' '},num2str(d.layers.analyzedLayers)));
+    
 elseif ismember(d.layers.analyzedLayers,d.layers.currentLayer) ~= 1 %means gui already run but layer not yet analyzed
-    childrenArray = GUI_childrenFinder_C2S(d,'Layer-wise analysis','RunAnalysis');
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'BackgroundColor', [1 1 1]);
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'FontWeight', 'bold');
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'ForegroundColor', [1 0 0]);
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'FontSize', 12);
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', 'Analyzing');
+    childrenArray = GUI_childrenFinder_C2S(d,'CoreAnalysis','RunAnalysisPB');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'BackgroundColor', [1 1 1],...
+        'FontWeight', 'bold','ForegroundColor', [1 0 0], 'FontSize', 12, 'String', 'Analyzing');
 
     gif = sprintf(['<html><img src="file:/%s\\Spinner@1x-1.0s-50px-50px.gif" ' 'width="40" height="40"></html>'], pwd);
-    loadingGraphics = uicontrol('style','push', 'pos',[540 168 40 40], 'String',gif,'enable','inactive','CData',uint8(153*ones(40,40,3))); % Use an inactive (not disabled) pushbutton to display the gif. Use CData instead of background color to flatten.
+    loadingGraphics = uicontrol('style','push', 'pos',[540 168 40 40], 'String',gif,'enable','inactive','CData',uint8(255*ones(40,40,3)));
 
     pause(0.5);
     UpdateProgressbar(d,'progressbar_primary', [0 0 1], 1/totalAnalysisSteps);
 
+    %calculate neuronal response PSNR
     d.PSNR = CalculatePSNR_C2S(d);
-    d.Values.TBDynamic(1).String = num2str(size(d.PSNR,2));
-
-
+    lowPSNRcount = sum(d.PSNR<18);
+    %update PSNR filter TB
+    childrenArray = GUI_childrenFinder_C2S(d,'Analysis Output','PSNRfilterTB');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),'String',...
+        strcat('Neurons filtered due to low PSNR:',{' '},num2str(lowPSNRcount)));
+    %update suite2p total neuron TB
+    childrenArray = GUI_childrenFinder_C2S(d,'Analysis Output','DffCountTB');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),'String',...
+        strcat('Total neurons in suite2p output:',{' '},num2str(size(d.PSNR,2))));
+    %update final saved df/f neuron TB
+    childrenArray = GUI_childrenFinder_C2S(d,'Analysis Output','DffSavedUnitsTB');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),'String',...
+        strcat('Final number of neurons for which ΔF/F saved:',{' '},num2str(size(d.PSNR,2)-lowPSNRcount)));
+    
+    %calculate df/f
     deltaff = RunDff_C2S(d);
-    d.Values.TBDynamic(5).String = num2str(size(deltaff,1));
     UpdateProgressbar(d,'progressbar_primary', [0 0 1], 2/totalAnalysisSteps);
 
+    %calculate spikes
     populationSpikeMatrix = GenerateBinarySpikeMatrixByOASIS_C2S(d,deltaff);
     [xCoord,yCoord] = Suite2pRoiCoordinateExporter_C2S(d);
     UpdateProgressbar(d,'progressbar_primary', [0 0 1], 3/totalAnalysisSteps);
@@ -86,26 +116,29 @@ elseif ismember(d.layers.analyzedLayers,d.layers.currentLayer) ~= 1 %means gui a
     delete(loadingGraphics)
 
     cd(d.originalCodePath)
-    childrenArray = GUI_childrenFinder_C2S(d,'Layer-wise analysis','RunAnalysis');
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off');
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'BackgroundColor', [1 1 1]);
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'FontWeight', 'bold');
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'FontSize', 12);
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', 'Finished');
+    %if analysis successfully run, then disable run analysis PB
+    childrenArray = GUI_childrenFinder_C2S(d,'CoreAnalysis','RunAnalysisPB');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
+        'BackgroundColor', 'w', 'ForegroundColor', [0.5 0.5 0.5]',...
+        'FontWeight', 'bold', 'FontSize', 10, 'String','Finished');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),'Enable','inactive');
     d = ToLog(d, "Analysis successful! Data Saved.");
-
+    %pop-up msgbox
+    beep;
+    CustomMsgBox_C2S(sprintf('Analysis run successfully.'));
+    %update layer selection analyzed layer TB
     d.layers.analyzedLayers = [d.layers.analyzedLayers,d.layers.currentLayer];
-    d.Values.TBDynamic(6).String = num2str(d.layers.analyzedLayers);
+    childrenArray = GUI_childrenFinder_C2S(d,'Layer selection','AnalyzedLayerTB');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),'String',...
+        strcat('Completely analyzed layers:',{' '},num2str(d.layers.analyzedLayers)));
+        
     
 else %means layer is already analyzed
     d = ToError(d, " Layer already analyzed!!");
-    d = UpdateCheckmark_C2S(d,'layerselected', 0);
-    UISet_C2S(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
+    set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
         'ForegroundColor',[0.64 0.08 0.18]);
-    childrenArray = GUI_childrenFinder_C2S(d,'Layer-wise analysis','FallSelection');
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off');
-    d.Values.TBDynamic(3).String = num2str(d.layers.currentLayer);
-
+    childrenArray = GUI_childrenFinder_C2S(d,'CoreAnalysis','RunAnalysisPB');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off');
 end
 
 

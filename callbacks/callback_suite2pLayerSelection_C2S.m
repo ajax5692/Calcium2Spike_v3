@@ -18,7 +18,7 @@ if DD_value ~= 1
         set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
             'String',strcat('Selected layer:',{' '},num2str(d.layers.currentLayer)));
 
-        d = ToError(d, " No errors");
+        d = ToError(d, "No errors");
         set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
             'ForegroundColor',[0.64 0.08 0.18]);
         d = ToLog(d, "Layer successfully selected");
@@ -52,10 +52,10 @@ if DD_value ~= 1
             set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'on');
 
         else %means layer is already analyzed
-            d = ToError(d, " Layer already analyzed!!");
+            d = ToError(d, "Layer already analyzed!!");
             %pop-up msgbox
             beep;
-            f = msgbox("Layer already analyzed!","Error","warn");
+            CustomMsgBox_C2S('Layer already analyzed!');
             %update layer selection checkmark color
             childrenArray = GUI_childrenFinder_C2S(d,'Layer selection','LayerSelectionCheckmark');
             set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
@@ -114,10 +114,10 @@ if DD_value ~= 1
         end
     end
 else %user selected the incorrect DD option ('Select layer')
-    d = ToError(d, " Please select a correct layer!");
+    d = ToError(d, "Please select a correct layer!");
     %pop-up msgbox
     beep;
-    f = msgbox("Please select a correct layer!","Error","warn");
+    CustomMsgBox_C2S('Please select a correct layer!');
     %layer selection space card - update layer selection checkmark color
     childrenArray = GUI_childrenFinder_C2S(d,'Layer selection','LayerSelectionCheckmark');
     set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...

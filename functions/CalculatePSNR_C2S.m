@@ -12,34 +12,30 @@ load(strcat(d.FallDataPath,d.FallFilename))
 
 PSNRcounter = 1;
 
-childrenArray = GUI_childrenFinder_C2S(d,'','secondaryPBconsole');
+childrenArray = GUI_childrenFinder_C2S(d,'CoreAnalysis','secondaryPBconsole');
 
-for cellIndex = 1:size(F,1)
+try
+    for cellIndex = 1:size(F,1)
 
-    d.source.Children(childrenArray).String = 'Step 1/3: PSNR';
-    UpdateProgressbar(d,'progressbar_secondary', [1 0 0], cellIndex/size(F,1));
-    pause(0.05)
+        d.source.Children(childrenArray(1)).Children(childrenArray(2)).String = 'Step 1/3: PSNR';
+        UpdateProgressbar(d,'progressbar_secondary', [1 0 0], cellIndex/size(F,1));
+        pause(0.05)
 
-    if isCell(cellIndex,1) == 1
+        if isCell(cellIndex,1) == 1
 
-        PSNR(PSNRcounter) = 20 * log10(max(F(cellIndex,:)-Fneu(cellIndex,:))/std(Fneu(cellIndex,:)));
-        PSNRcounter = PSNRcounter + 1;
+            PSNR(PSNRcounter) = 20 * log10(max(F(cellIndex,:)-Fneu(cellIndex,:))/std(Fneu(cellIndex,:)));
+            PSNRcounter = PSNRcounter + 1;
 
-    else
-        continue
+        else
+            continue
+        end
     end
+catch
+    d = ToError(d, "Error in PSNR calculation");
+    set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
+        'ForegroundColor',[0.64 0.08 0.18]);
+    d = ToLog(d, "Analysis interrupted");
+    %pop-up msgbox
+    beep;
+    CustomMsgBox_C2S(sprintf('Analysis interrupted due to\nPSNR calculation error.'));
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-    

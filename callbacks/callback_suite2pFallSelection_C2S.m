@@ -75,10 +75,7 @@ try
             'ForegroundColor',[0.64 0.08 0.18]);
         %pop-up msgbox
         beep;
-        f = msgbox("Fall.mat file selection interrupted!","Error","warn");
-        textObj = findobj(f, 'Type', 'text');
-        set(textObj, 'FontSize', 10, 'FontWeight', 'bold');
-        set(f,'units','normalized','Position',[1.5 0.607 0.15 0.0765]);
+        CustomMsgBox_C2S(sprintf('Fall.mat file\nselection interrupted!'));
         % - suite2p Fall space card
         %reset filepath TB
         childrenArray = GUI_childrenFinder_C2S(d,'Suite2p Fall.mat file','FallFilepathTB');
@@ -125,7 +122,7 @@ try
 
 catch
     delete(loadingGraphics)
-    d = ToError(d, " Fall.mat selection interrupted");
+    d = ToError(d, "Fall.mat selection interrupted");
     %pop-up msgbox
     beep;
     f = msgbox("Fall.mat file selection interrupted!","Error","warn");
