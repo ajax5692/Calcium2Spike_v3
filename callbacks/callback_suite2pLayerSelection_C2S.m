@@ -3,73 +3,167 @@ function callback_suite2pLayerSelection_C2S(hO, ed)
 % figureCalcium2Spike_GUI = ancestor(hO,'figure');      % get figure that owns guidata
 d = guidata(hO);
 
-childrenArray = GUI_childrenFinder_C2S(d,'Layer-wise analysis','LayerSelectionDD');
+childrenArray = GUI_childrenFinder_C2S(d,'Layer selection','LayerSelectionDD');
 DD_value = d.source.Children(childrenArray(1)).Children(childrenArray(2)).Value;
 
 if DD_value ~= 1
     d.layers.currentLayer = DD_value - 1;
     if isempty(d.layers.analyzedLayers) == 1 %when gui is run first time
-        d = UpdateCheckmark_C2S(d,'layerselected', 1);
+        %update layer selection checkmark color
+        childrenArray = GUI_childrenFinder_C2S(d,'Layer selection','LayerSelectionCheckmark');
+        set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
+        'ForegroundColor',[0.21 0.70 0.21]);
+        %update current layer TB
+        childrenArray = GUI_childrenFinder_C2S(d,'Layer selection','CurrentLayerTB');
+        set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
+            'String',strcat('Selected layer:',{' '},num2str(d.layers.currentLayer)));
+
         d = ToError(d, " No errors");
-        UISet_C2S(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
+        set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
             'ForegroundColor',[0.64 0.08 0.18]);
         d = ToLog(d, "Layer successfully selected");
 
-        childrenArray = GUI_childrenFinder_C2S(d,'Layer-wise analysis','FallSelection');
-        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'on');
-        d.Values.TBDynamic(3).String = num2str(d.layers.currentLayer);
-
+        childrenArray = GUI_childrenFinder_C2S(d,'Suite2p Fall.mat file','FallSelectionPB');
+        set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'on');
+        
     else %if gui was already running before, check if data was already analyzed
         if ismember(d.layers.analyzedLayers,d.layers.currentLayer) ~= 1 %means layer not yet analyzed
             d.layers.currentLayer = DD_value - 1;
-            d = UpdateCheckmark_C2S(d,'layerselected', 1);
-            d = UpdateCheckmark_C2S(d,'fallfileselected', 0);
             d = ToError(d, " No errors");
-            UISet_C2S(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
+            set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
                 'ForegroundColor',[0.64 0.08 0.18]);
             d = ToLog(d, "Layer successfully selected");
 
-            childrenArray = GUI_childrenFinder_C2S(d,'Layer-wise analysis','FallSelection');
-            UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'on');
-            % d.layers.analyzedLayers = [d.layers.analyzedLayers,d.layers.currentLayer];
-            % d.Values.TBDynamic(6).String = num2str(d.layers.analyzedLayers);
-            d.Values.TBDynamic(3).String = num2str(d.layers.currentLayer);
+            %update layer selection checkmark color
+            childrenArray = GUI_childrenFinder_C2S(d,'Layer selection','LayerSelectionCheckmark');
+            set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
+                'ForegroundColor',[0.21 0.70 0.21]);
+            %update current layer TB
+            childrenArray = GUI_childrenFinder_C2S(d,'Layer selection','CurrentLayerTB');
+            set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
+                'String',strcat('Selected layer:',{' '},num2str(d.layers.currentLayer)));
+
+            d = ToError(d, " No errors");
+            set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
+                'ForegroundColor',[0.64 0.08 0.18]);
+            d = ToLog(d, "Layer successfully selected");
+
+            childrenArray = GUI_childrenFinder_C2S(d,'Suite2p Fall.mat file','FallSelectionPB');
+            set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'on');
 
         else %means layer is already analyzed
             d = ToError(d, " Layer already analyzed!!");
-            d = UpdateCheckmark_C2S(d,'layerselected', 0);
-            d = UpdateCheckmark_C2S(d,'fallfileselected', 0);
-            UISet_C2S(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
-                'ForegroundColor',[0.64 0.08 0.18]);
-            childrenArray = GUI_childrenFinder_C2S(d,'Layer-wise analysis','FallSelection');
-            UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off');
+            %pop-up msgbox
+            beep;
+            f = msgbox("Layer already analyzed!","Error","warn");
+            %update layer selection checkmark color
+            childrenArray = GUI_childrenFinder_C2S(d,'Layer selection','LayerSelectionCheckmark');
+            set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
+                'ForegroundColor',[[0.9 0.3 0.3]]);
+            %update current layer TB
+            childrenArray = GUI_childrenFinder_C2S(d,'Layer selection','CurrentLayerTB');
+            set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
+                'String',strcat('Selected layer:',{' '},num2str(d.layers.currentLayer)));
 
-            childrenArray = GUI_childrenFinder_C2S(d,'Layer-wise analysis','RunAnalysis');
-            UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off');
-            UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'BackgroundColor', [1 1 1]);
-            UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', 'Finished');
-            UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'FontWeight', 'normal');
-            UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'FontSize', 10);
-
-            d.Values.TBDynamic(3).String = num2str(d.layers.currentLayer);
+            childrenArray = GUI_childrenFinder_C2S(d,'Suite2p Fall.mat file','FallSelectionPB');
+            set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off');
+            
+            % - suite2p Fall space card
+            %disable pushbutton
+            childrenArray = GUI_childrenFinder_C2S(d,'Suite2p Fall.mat file','FallSelectionPB');
+            set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable','off');
+            %reset suite2p Fall filepath TB
+            childrenArray = GUI_childrenFinder_C2S(d,'Suite2p Fall.mat file','FallFilepathTB');
+            set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
+                'No file selected');
+            %update checkmark color
+            childrenArray = GUI_childrenFinder_C2S(d,'Suite2p Fall.mat file','FallCheckmark');
+            set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
+                'ForegroundColor',[0.9 0.3 0.3]);
+            % - update Fall params space card
+            %no. of ROIs
+            childrenArray = GUI_childrenFinder_C2S(d,'Fall.mat Params','FallROInumTB');
+            set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
+                'No. of ROIs detected:');
+            % - update analysis space card
+            %disable OASIS EB
+            childrenArray = GUI_childrenFinder_C2S(d,'Analysis','SetOASISthresholdEB');
+            set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off');
+            %disable OASIS TB
+            childrenArray = GUI_childrenFinder_C2S(d,'Analysis','SetOASISthresholdTB');
+            set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable','off');
+            % - update core analysis space card
+            %disable run analysis PB
+            childrenArray = GUI_childrenFinder_C2S(d,'CoreAnalysis','RunAnalysisPB');
+            set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off',...
+                'BackgroundColor', 'w', 'ForegroundColor', 'k', 'FontWeight', 'normal', 'FontWeight',...
+                'normal', 'FontSize', 10);
+            % - reset the analysis output space card
+            %df/f count
+            childrenArray = GUI_childrenFinder_C2S(d,'Analysis Output','DffCountTB');
+            set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
+                'Total neurons in suite2p output:');
+            %PSNR filtered units
+            childrenArray = GUI_childrenFinder_C2S(d,'Analysis Output','PSNRfilterTB');
+            set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
+                'Neurons filtered due to low PSNR:');
+            %saved df/f units
+            childrenArray = GUI_childrenFinder_C2S(d,'Analysis Output','DffSavedUnitsTB');
+            set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
+                'Final number of neurons for which ΔF/F saved:');
         end
     end
 else %user selected the incorrect DD option ('Select layer')
     d = ToError(d, " Please select a correct layer!");
-    d = UpdateCheckmark_C2S(d,'layerselected', 0);
-    d = UpdateCheckmark_C2S(d,'fallfileselected', 0);
-    UISet_C2S(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
-        'ForegroundColor',[0.64 0.08 0.18]);
-    childrenArray = GUI_childrenFinder_C2S(d,'Layer-wise analysis','FallSelection');
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off');
-    d.Values.TBDynamic(3).String = '--';
-
-    childrenArray = GUI_childrenFinder_C2S(d,'Layer-wise analysis','RunAnalysis');
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off');
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'BackgroundColor', [1 1 1]);
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', 'Run analysis');
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'FontWeight', 'normal');
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'FontSize', 10);
+    %pop-up msgbox
+    beep;
+    f = msgbox("Please select a correct layer!","Error","warn");
+    %layer selection space card - update layer selection checkmark color
+    childrenArray = GUI_childrenFinder_C2S(d,'Layer selection','LayerSelectionCheckmark');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
+        'ForegroundColor',[[0.9 0.3 0.3]]);
+    % - suite2p Fall space card
+    %disable pushbutton
+    childrenArray = GUI_childrenFinder_C2S(d,'Suite2p Fall.mat file','FallSelectionPB');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable','off');
+    %reset filepath TB
+    childrenArray = GUI_childrenFinder_C2S(d,'Suite2p Fall.mat file','FallFilepathTB');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
+        'No file selected');
+    %update checkmark color
+    childrenArray = GUI_childrenFinder_C2S(d,'Suite2p Fall.mat file','FallCheckmark');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
+        'ForegroundColor',[0.9 0.3 0.3]);
+    % - update Fall params space card
+    %no. of ROIs
+    childrenArray = GUI_childrenFinder_C2S(d,'Fall.mat Params','FallROInumTB');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
+        'No. of ROIs detected:');
+    % - update analysis space card
+    %disable OASIS EB
+    childrenArray = GUI_childrenFinder_C2S(d,'Analysis','SetOASISthresholdEB');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off');
+    %disable OASIS TB
+    childrenArray = GUI_childrenFinder_C2S(d,'Analysis','SetOASISthresholdTB');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable','off');
+    % - update core analysis space card
+    %disable run analysis PB
+    childrenArray = GUI_childrenFinder_C2S(d,'CoreAnalysis','RunAnalysisPB');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off',...
+        'BackgroundColor', 'w', 'ForegroundColor', 'k', 'FontWeight', 'normal', 'FontSize', 10);
+    % - reset the analysis output space card
+    %df/f count
+    childrenArray = GUI_childrenFinder_C2S(d,'Analysis Output','DffCountTB');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
+        'Total neurons in suite2p output:');
+    %PSNR filtered units
+    childrenArray = GUI_childrenFinder_C2S(d,'Analysis Output','PSNRfilterTB');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
+        'Neurons filtered due to low PSNR:');
+    %saved df/f units
+    childrenArray = GUI_childrenFinder_C2S(d,'Analysis Output','DffSavedUnitsTB');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
+        'Final number of neurons for which ΔF/F saved:');
 end
 
 guidata(d.source, d);

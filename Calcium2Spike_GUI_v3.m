@@ -216,8 +216,8 @@ LayerUIGroup = uipanel('Title','Layer selection',...
 % - 2a.i. Dropdown menu for layers
 DD_currentLayer = uicontrol(LayerUIGroup);
 UISet_C2S(DD_currentLayer,'Style','popupmenu')
-UISet_C2S(DD_currentLayer,'String', {'Select Layer', 'Layer 1', 'Layer 2','Layer 3', 'Layer 4','Layer 5'});
-UISet_C2S(DD_currentLayer, 'Position',[30,30,100,20]);
+UISet_C2S(DD_currentLayer,'String', {'Select Layer'});
+UISet_C2S(DD_currentLayer, 'Position',[30,33,100,20]);
 UISet_C2S(DD_currentLayer, 'FontSize',10);
 UISet_C2S(DD_currentLayer, 'Enable', 'off');
 UISet_C2S(DD_currentLayer, 'Tag', 'LayerSelectionDD');
@@ -225,7 +225,7 @@ UISet_C2S(DD_currentLayer, 'Callback', @callback_suite2pLayerSelection_C2S);
 
 generalTB(8) = GenericTextBox(LayerUIGroup);
 UISet_C2S(generalTB(8), 'Position', [0.02,0.05,0.974271012006861,0.3]);
-UISet_C2S(generalTB(8), 'String', 'Current layer: --');
+UISet_C2S(generalTB(8), 'String', 'Selected layer: --');
 UISet_C2S(generalTB(8), 'HorizontalAlignment', 'left');
 UISet_C2S(generalTB(8), 'ForeGroundColor', [0.3 0.3 0.3]);
 UISet_C2S(generalTB(8), 'BackGroundColor', [0.75 0.75 0.75]);
@@ -266,7 +266,7 @@ UISet_C2S(PB(4), 'Callback', @callback_suite2pFallSelection_C2S);
 UISet_C2S(PB(4), 'Tag', 'FallSelectionPB');
 
 generalTB(11) = GenericTextBox(FallSelectionUIGroup);
-UISet_C2S(generalTB(11), 'Position', [0.2,0.745,0.974271012006861,0.143708145927016]);
+UISet_C2S(generalTB(11), 'Position', [0.25,0.745,0.974271012006861,0.143708145927016]);
 UISet_C2S(generalTB(11), 'String', 'No file selected');
 UISet_C2S(generalTB(11), 'HorizontalAlignment', 'left');
 UISet_C2S(generalTB(11), 'ForeGroundColor', [0.3 0.3 0.3]);
@@ -430,7 +430,7 @@ AnalysisResultUIGroup = uipanel('Title','Analysis Output',...
 
 generalTB(15) = GenericTextBox(AnalysisResultUIGroup);
 UISet_C2S(generalTB(15), 'Position', [0.01,0.5,0.974271012006861,0.3]);
-UISet_C2S(generalTB(15), 'String', ('ΔF/F units (should match with no. of ROIs detected):'));
+UISet_C2S(generalTB(15), 'String', ('Total neurons in suite2p output:'));
 UISet_C2S(generalTB(15), 'FontSize', 8);
 UISet_C2S(generalTB(15), 'HorizontalAlignment', 'left');
 UISet_C2S(generalTB(15), 'ForeGroundColor', [0.4 0.4 0.4]);
@@ -439,7 +439,7 @@ UISet_C2S(generalTB(15), 'Tag', 'DffCountTB');
 
 generalTB(16) = GenericTextBox(AnalysisResultUIGroup);
 UISet_C2S(generalTB(16), 'Position', [0.01,0.1,0.974271012006861,0.3]);
-UISet_C2S(generalTB(16), 'String', ('Units filtered due to low PSNR:'));
+UISet_C2S(generalTB(16), 'String', ('Neurons filtered due to low PSNR:'));
 UISet_C2S(generalTB(16), 'FontSize', 8);
 UISet_C2S(generalTB(16), 'HorizontalAlignment', 'left');
 UISet_C2S(generalTB(16), 'ForeGroundColor', [0.4 0.4 0.4]);
@@ -448,7 +448,7 @@ UISet_C2S(generalTB(16), 'Tag', 'PSNRfilterTB');
 
 generalTB(17) = GenericTextBox(AnalysisResultUIGroup);
 UISet_C2S(generalTB(17), 'Position', [0.41,0.5,0.974271012006861,0.3]);
-UISet_C2S(generalTB(17), 'String', ('Final ΔF/F units saved:'));
+UISet_C2S(generalTB(17), 'String', ('Final number of neurons for which ΔF/F saved:'));
 UISet_C2S(generalTB(17), 'FontSize', 8);
 UISet_C2S(generalTB(17), 'HorizontalAlignment', 'left');
 UISet_C2S(generalTB(17), 'ForeGroundColor', [0.4 0.4 0.4]);

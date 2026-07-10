@@ -10,7 +10,7 @@ if mescDataName ~= 0
     d.mescDataName = mescDataName;
     d.mescDataLocation = mescDataLocation;
     d = ToError(d, " No errors");
-    UISet_C2S(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
+    set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
             'ForegroundColor',[0.64 0.08 0.18]);
     d = ToLog(d, "MESc file successfully selected");
     %shorten mesc filepath for display in GUI
@@ -24,15 +24,15 @@ if mescDataName ~= 0
     end
     %update mesc location path TB
     childrenArray = GUI_childrenFinder_C2S(d,'MESc file','MEScFileLocationPathTB');
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
         'String', shortPath);
     %update mesc file selection checkmark color
     childrenArray = GUI_childrenFinder_C2S(d,'MESc file','MEScFileSelectionCheckmark');
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
         'ForegroundColor',[0.21 0.70 0.21]);
     %enable MESc ref. unit EB
     childrenArray = GUI_childrenFinder_C2S(d,'MESc file','SetMEScRefUnitEB');
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'on');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'on');
     % - mesc params space card
     childrenArray = GUI_childrenFinder_C2S(d,'MESc file','SetMEScRefUnitEB');
     refMEScUnit = d.source.Children(childrenArray(1)).Children(childrenArray(2)).String;
@@ -44,23 +44,23 @@ if mescDataName ~= 0
     timestepString = strcat('TimeSteps in ms:',{' '},num2str(tStepsInMs,'%05.2f'));
     %update framerate TB
     childrenArray = GUI_childrenFinder_C2S(d,'MESc Params','MEScFramerateTB');
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
         'String', framerateString);
     %update timesteps TB
     childrenArray = GUI_childrenFinder_C2S(d,'MESc Params','MEScTimeStepsTB');
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
         'String', timestepString);
     %update no. of planes TB
     numPlanes = h5readatt(strcat(d.mescDataLocation,d.mescDataName),...
         strcat('/MSession_0/MUnit_',refMEScUnit,'/'),'Slices');
     numPlaneString = strcat('No. of planes detected:',{' '},num2str(numPlanes));
     childrenArray = GUI_childrenFinder_C2S(d,'MESc Params','MEScMultiplaneTB');
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
         'String', numPlaneString);
     % - layer selection space card
     %enable dropdown menu
     childrenArray = GUI_childrenFinder_C2S(d,'Layer selection','LayerSelectionDD');
-    UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable','on');
+    set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable','on');
     %dynamic update of layer numbers
     dynamicLayerList = {'Select Layer'};
     for ii = 1:numPlanes
@@ -68,97 +68,101 @@ if mescDataName ~= 0
     end
     childrenArray = GUI_childrenFinder_C2S(d,'Layer selection','LayerSelectionDD');
     dropdownHandle = d.source.Children(childrenArray(1)).Children(childrenArray(2));    
-    UISet_C2S(dropdownHandle, 'String', dynamicLayerList);
+    set(dropdownHandle, 'String', dynamicLayerList);
     
 else
     d = ToError(d, " MESc file selection interrupted by user");
-    UISet_C2S(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
+    set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
             'ForegroundColor',[0.64 0.08 0.18]);
+    %pop-up msgbox
+    beep;
+    f = msgbox("MESc file selection interrupted!","Error","warn");
+    textObj = findobj(f, 'Type', 'text');
+    set(textObj, 'FontSize', 10, 'FontWeight', 'bold');
+    set(f,'units','normalized','Position',[1.47 0.613 0.16 0.0765]);
     % - mesc space card
         %reset MESc filepath text
         childrenArray = GUI_childrenFinder_C2S(d,'MESc file','MEScFileLocationPathTB');
-        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
+        set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
             'No MESc file selected');
         %update checkmark color
         childrenArray = GUI_childrenFinder_C2S(d,'MESc file','MEScFileSelectionCheckmark');
-        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
+        set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
             'ForegroundColor',[0.9 0.3 0.3]);
         %disable MESc ref. unit EB
         childrenArray = GUI_childrenFinder_C2S(d,'MESc file','SetMEScRefUnitEB');
-        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off');
+        set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off');
         % - update MESc params space card
         %framerate TB
         childrenArray = GUI_childrenFinder_C2S(d,'MESc Params','MEScFramerateTB');
-        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
+        set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
             'FrameRate:');
         %timeSteps TB
         childrenArray = GUI_childrenFinder_C2S(d,'MESc Params','MEScTimeStepsTB');
-        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
+        set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
             'TimeSteps in ms:');
         %no. of planes TB
         childrenArray = GUI_childrenFinder_C2S(d,'MESc Params','MEScMultiplaneTB');
-        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
+        set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
             'No. of planes detected:');
         % - layer selection space card
         %disable dropdown menu
         childrenArray = GUI_childrenFinder_C2S(d,'Layer selection','LayerSelectionDD');
-        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable','off');
+        set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable','off');
         %reset current layer TB
         childrenArray = GUI_childrenFinder_C2S(d,'Layer selection','CurrentLayerTB');
-        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
-            'Current layer: --');
+        set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
+            'Selected layer: --');
         %reset analyzed layer TB
         childrenArray = GUI_childrenFinder_C2S(d,'Layer selection','AnalyzedLayerTB');
-        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
+        set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
             'No layers analyzed yet');
         %update checkmark color
         childrenArray = GUI_childrenFinder_C2S(d,'Layer selection','LayerSelectionCheckmark');
-        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
+        set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
             'ForegroundColor',[0.9 0.3 0.3]);
         % - suite2p Fall space card
         %disable pushbutton
         childrenArray = GUI_childrenFinder_C2S(d,'Suite2p Fall.mat file','FallSelectionPB');
-        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable','off');
-        %reset filepath TB
+        set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable','off');
+        %reset suite2p Fall filepath TB
         childrenArray = GUI_childrenFinder_C2S(d,'Suite2p Fall.mat file','FallFilepathTB');
-        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
+        set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
             'No file selected');
         %update checkmark color
         childrenArray = GUI_childrenFinder_C2S(d,'Suite2p Fall.mat file','FallCheckmark');
-        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
+        set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
             'ForegroundColor',[0.9 0.3 0.3]);
         % - update Fall params space card
         %no. of ROIs
         childrenArray = GUI_childrenFinder_C2S(d,'Fall.mat Params','FallROInumTB');
-        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
+        set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
             'No. of ROIs detected:');
         % - update analysis space card
         %disable OASIS EB
         childrenArray = GUI_childrenFinder_C2S(d,'Analysis','SetOASISthresholdEB');
-        % UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
-        %     'No. of ROIs detected:');
+        set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off');
         %disable OASIS TB
         childrenArray = GUI_childrenFinder_C2S(d,'Analysis','SetOASISthresholdTB');
-        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable','off');
+        set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable','off');
         % - update core analysis space card
         %disable run analysis PB
         childrenArray = GUI_childrenFinder_C2S(d,'CoreAnalysis','RunAnalysisPB');
-        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off',...
-            'BackgroundColor', 'w', 'ForegroundColor', 'k', 'FontWeight', 'normal', 'FontWeight',...
-            'normal', 'FontSize', 10);
+        set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off',...
+            'BackgroundColor', 'w', 'ForegroundColor', 'k', 'FontWeight', 'normal', 'FontSize', 10);
         % - reset the analysis output space card
         %df/f count
         childrenArray = GUI_childrenFinder_C2S(d,'Analysis Output','DffCountTB');
-        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
-            'ΔF/F units (should match with no. of ROIs detected):');
+        set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
+            'Total neurons in suite2p output:');
         %PSNR filtered units
         childrenArray = GUI_childrenFinder_C2S(d,'Analysis Output','PSNRfilterTB');
-        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
-            'Units filtered due to low PSNR:');
+        set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
+            'Neurons filtered due to low PSNR:');
         %saved df/f units
         childrenArray = GUI_childrenFinder_C2S(d,'Analysis Output','DffSavedUnitsTB');
-        UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
-            'Final ΔF/F units saved:');
+        set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
+            'Final number of neurons for which ΔF/F saved:');
 end
 
 guidata(d.source, d);
