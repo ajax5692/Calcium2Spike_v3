@@ -6,7 +6,7 @@ d = guidata(hO);
 totalAnalysisSteps = 3;
 
 if isempty(d.layers.analyzedLayers) == 1 %when gui is run first time
-    d = ToError(d, "No errors");
+    d = ToError_C2S(d, "No errors");
     d = ToLog(d, "--");
     set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
         'ForegroundColor',[0.64 0.08 0.18]);
@@ -134,7 +134,7 @@ elseif ismember(d.layers.analyzedLayers,d.layers.currentLayer) ~= 1 %means gui a
         
     
 else %means layer is already analyzed
-    d = ToError(d, " Layer already analyzed!!");
+    d = ToError_C2S(d, " Layer already analyzed!!");
     set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
         'ForegroundColor',[0.64 0.08 0.18]);
     childrenArray = GUI_childrenFinder_C2S(d,'CoreAnalysis','RunAnalysisPB');

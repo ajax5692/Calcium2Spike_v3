@@ -9,10 +9,8 @@ saveDirectory = uigetdir('C:\Users\abhrajyoti.chakrabarti\Desktop\testNewGUI\',.
 try
     if saveDirectory ~= 0
         d.saveAnalyzedData = saveDirectory;
-        d = ToError(d, "No errors");
-        set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
-            'ForegroundColor',[0.64 0.08 0.18]);
-        d = ToLog(d, "Save location successfully specified");
+        d = ToError_C2S(d, "No errors");
+        d = ToLog_C2S(d, "Save location successfully specified");
 
         %shorten save folder path for display in GUI
         % longPath = fullfile(d.saveAnalyzedData);
@@ -48,7 +46,8 @@ try
         cd(d.originalCodePath)
 
     else %disable buttons and update GUI accordingly
-        d = ToError(d, "Save location not specified by user");
+        d = ToError_C2S(d, "Save location not specified by user");
+        d = ToLog_C2S(d, " An error occured!!!");
         set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
             'ForegroundColor',[0.64 0.08 0.18]);
         %pop-up msgbox

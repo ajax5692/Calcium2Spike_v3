@@ -460,6 +460,4 @@ PB(6) = GenericPushButton_C2S(figureCalcium2Spike_GUI);
 set(PB(6), 'String', 'Restart GUI');
 set(PB(6), 'Position', [0.895,0.028,0.08,0.055]);
 set(PB(6), 'Tag', 'RestartGuiPB');
-set(PB(6), 'Callback', @callback_resetCalcium2Spike_GUI_v3);
-
-aa=[];
+set(PB(6), 'Callback', @callback_resetCalcium2Spike_GUI_v4);

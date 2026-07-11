@@ -20,7 +20,7 @@ try
         %pop-up msgbox
         beep;
         CustomMsgBox_C2S(sprintf('Incorrect Fall.mat\nfile selected.'));
-        d = ToError(d, "Incorrect Fall.mat selected.");
+        d = ToError_C2S(d, "Incorrect Fall.mat selected.");
         delete(loadingGraphics)
         % - suite2p Fall space card
         %reset filepath TB
@@ -93,7 +93,7 @@ try
             set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
                 shortPath);
 
-            d = ToError(d, " No errors");
+            d = ToError_C2S(d, " No errors");
             set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
                 'ForegroundColor',[0.64 0.08 0.18]);
             d = ToLog(d, "Fall.mat successfully selected");
@@ -126,7 +126,7 @@ try
             delete(loadingGraphics)
 
         else
-            d = ToError(d, "Fall.mat selection interrupted");
+            d = ToError_C2S(d, "Fall.mat selection interrupted");
             set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
                 'ForegroundColor',[0.64 0.08 0.18]);
             %pop-up msgbox
@@ -182,7 +182,7 @@ try
 
 catch
     delete(loadingGraphics)
-    d = ToError(d, "Fall.mat selection interrupted");
+    d = ToError_C2S(d, "Fall.mat selection interrupted");
     %pop-up msgbox
     beep;
     CustomMsgBox_C2S(sprintf('Fall.mat file\nselection interrupted!'));

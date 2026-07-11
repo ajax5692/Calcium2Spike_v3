@@ -18,7 +18,7 @@ if DD_value ~= 1
         set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
             'String',strcat('Selected layer:',{' '},num2str(d.layers.currentLayer)));
 
-        d = ToError(d, "No errors");
+        d = ToError_C2S(d, "No errors");
         set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
             'ForegroundColor',[0.64 0.08 0.18]);
         d = ToLog(d, "Layer successfully selected");
@@ -29,7 +29,7 @@ if DD_value ~= 1
     else %if gui was already running before, check if data was already analyzed
         if ismember(d.layers.analyzedLayers,d.layers.currentLayer) ~= 1 %means layer not yet analyzed
             d.layers.currentLayer = DD_value - 1;
-            d = ToError(d, " No errors");
+            d = ToError_C2S(d, " No errors");
             set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
                 'ForegroundColor',[0.64 0.08 0.18]);
             d = ToLog(d, "Layer successfully selected");
@@ -43,7 +43,7 @@ if DD_value ~= 1
             set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
                 'String',strcat('Selected layer:',{' '},num2str(d.layers.currentLayer)));
 
-            d = ToError(d, " No errors");
+            d = ToError_C2S(d, " No errors");
             set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
                 'ForegroundColor',[0.64 0.08 0.18]);
             d = ToLog(d, "Layer successfully selected");
@@ -68,7 +68,7 @@ if DD_value ~= 1
             UpdateProgressbar(d,'progressbar_secondary', [0 0 1], 0);
 
         else %means layer is already analyzed
-            d = ToError(d, "Layer already analyzed!!");
+            d = ToError_C2S(d, "Layer already analyzed!!");
             %pop-up msgbox
             beep;
             CustomMsgBox_C2S('Layer already analyzed!');
@@ -132,7 +132,7 @@ if DD_value ~= 1
         end
     end
 else %user selected the incorrect DD option ('Select layer')
-    d = ToError(d, "Please select a correct layer!");
+    d = ToError_C2S(d, "Please select a correct layer!");
     %pop-up msgbox
     beep;
     CustomMsgBox_C2S('Please select a correct layer!');

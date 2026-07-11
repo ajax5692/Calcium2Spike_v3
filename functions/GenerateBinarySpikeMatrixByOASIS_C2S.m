@@ -59,6 +59,10 @@ try
     end
 
 catch
+    d = ToError_C2S(d, "Error in OASIS calculation");
+    set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
+        'ForegroundColor',[0.64 0.08 0.18]);
+    d = ToLog(d, " Analysis interrupted");
     %pop-up msgbox
     beep;
     CustomMsgBox_C2S(sprintf('OASIS module not loaded\nin Matlab set-path.'));

@@ -41,7 +41,7 @@ try
     set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'BackgroundColor', [0 1 1],...
         'ForegroundColor', [0 0 0], 'String', 'Data Pooled', 'Enable', 'off');
 catch
-    d = ToError(d, "Pooling data error!");
+    d = ToError_C2S(d, "Pooling data error!");
     %pop-up msgbox
     beep;
     CustomMsgBox_C2S(sprintf('Pooling data failed.\nPlease check frame\nnumbers across layers.'));

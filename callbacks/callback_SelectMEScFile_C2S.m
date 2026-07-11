@@ -9,7 +9,7 @@ d = guidata(hO);
 if mescDataName ~= 0
     d.mescDataName = mescDataName;
     d.mescDataLocation = mescDataLocation;
-    d = ToError(d, "No errors");
+    d = ToError_C2S(d, "No errors");
     set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
             'ForegroundColor',[0.64 0.08 0.18]);
     d = ToLog(d, "MESc file successfully selected");
@@ -71,7 +71,7 @@ if mescDataName ~= 0
     set(dropdownHandle, 'String', dynamicLayerList);
     
 else
-    d = ToError(d, "MESc file selection interrupted by user");
+    d = ToError_C2S(d, "MESc file selection interrupted by user");
     set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
             'ForegroundColor',[0.64 0.08 0.18]);
     %pop-up msgbox

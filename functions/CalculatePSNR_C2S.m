@@ -31,7 +31,7 @@ try
         end
     end
 catch
-    d = ToError(d, "Error in PSNR calculation");
+    d = ToError_C2S(d, "Error in PSNR calculation");
     set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
         'ForegroundColor',[0.64 0.08 0.18]);
     d = ToLog(d, "Analysis interrupted");
