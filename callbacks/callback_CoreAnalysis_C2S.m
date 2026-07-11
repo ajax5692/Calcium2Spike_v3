@@ -7,9 +7,7 @@ totalAnalysisSteps = 3;
 
 if isempty(d.layers.analyzedLayers) == 1 %when gui is run first time
     d = ToError_C2S(d, "No errors");
-    d = ToLog(d, "--");
-    set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
-        'ForegroundColor',[0.64 0.08 0.18]);
+    d = ToLog_C2S(d, "--");
     childrenArray = GUI_childrenFinder_C2S(d,'CoreAnalysis','RunAnalysisPB');
     set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'BackgroundColor', [1 1 1],...
         'FontWeight', 'bold','ForegroundColor', [1 0 0],'FontSize', 12, 'String', 'Analyzing');
@@ -72,6 +70,8 @@ if isempty(d.layers.analyzedLayers) == 1 %when gui is run first time
         strcat('Completely analyzed layers:',{' '},num2str(d.layers.analyzedLayers)));
     
 elseif ismember(d.layers.analyzedLayers,d.layers.currentLayer) ~= 1 %means gui already run but layer not yet analyzed
+    d = ToError_C2S(d, "No errors");
+    d = ToLog_C2S(d, "--");
     childrenArray = GUI_childrenFinder_C2S(d,'CoreAnalysis','RunAnalysisPB');
     set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'BackgroundColor', [1 1 1],...
         'FontWeight', 'bold','ForegroundColor', [1 0 0], 'FontSize', 12, 'String', 'Analyzing');
@@ -134,9 +134,8 @@ elseif ismember(d.layers.analyzedLayers,d.layers.currentLayer) ~= 1 %means gui a
         
     
 else %means layer is already analyzed
-    d = ToError_C2S(d, " Layer already analyzed!!");
-    set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
-        'ForegroundColor',[0.64 0.08 0.18]);
+    d = ToError_C2S(d, "Layer already analyzed.");
+    d = ToLog_C2S(d, "An error occured!!!");
     childrenArray = GUI_childrenFinder_C2S(d,'CoreAnalysis','RunAnalysisPB');
     set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off');
 end

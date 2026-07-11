@@ -61,4 +61,6 @@ catch
     %pop-up msgbox
     beep;
     CustomMsgBox_C2S(sprintf('Coordinate export from Suite2p\nencountered an error.'));
+    d = ToError_C2S(d, "Neuronal coordinate export from suite2p output failed.");
+    d = ToLog_C2S(d, "An error occured!!!");
 end

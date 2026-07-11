@@ -47,9 +47,7 @@ try
 
     else %disable buttons and update GUI accordingly
         d = ToError_C2S(d, "Save location not specified by user");
-        d = ToLog_C2S(d, " An error occured!!!");
-        set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
-            'ForegroundColor',[0.64 0.08 0.18]);
+        d = ToLog_C2S(d, "An error occured!!!");
         %pop-up msgbox
         beep;
         CustomMsgBox_C2S(sprintf('Save location specification\ninterrupted by user!'));

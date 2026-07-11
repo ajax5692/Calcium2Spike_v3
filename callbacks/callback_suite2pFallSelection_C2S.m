@@ -21,6 +21,7 @@ try
         beep;
         CustomMsgBox_C2S(sprintf('Incorrect Fall.mat\nfile selected.'));
         d = ToError_C2S(d, "Incorrect Fall.mat selected.");
+        d = ToLog_C2S(d, "An error occured!!!");
         delete(loadingGraphics)
         % - suite2p Fall space card
         %reset filepath TB
@@ -94,8 +95,6 @@ try
                 shortPath);
 
             d = ToError_C2S(d, " No errors");
-            set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
-                'ForegroundColor',[0.64 0.08 0.18]);
             d = ToLog(d, "Fall.mat successfully selected");
             %update Fall file selection checkmark color
             childrenArray = GUI_childrenFinder_C2S(d,'Suite2p Fall.mat file','FallCheckmark');
@@ -127,8 +126,7 @@ try
 
         else
             d = ToError_C2S(d, "Fall.mat selection interrupted");
-            set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
-                'ForegroundColor',[0.64 0.08 0.18]);
+            d = ToLog_C2S(d, "An error occured!!!");
             %pop-up msgbox
             beep;
             CustomMsgBox_C2S(sprintf('Fall.mat file\nselection interrupted!'));
@@ -183,6 +181,7 @@ try
 catch
     delete(loadingGraphics)
     d = ToError_C2S(d, "Fall.mat selection interrupted");
+    d = ToLog_C2S(d, "An error occured!!!");
     %pop-up msgbox
     beep;
     CustomMsgBox_C2S(sprintf('Fall.mat file\nselection interrupted!'));

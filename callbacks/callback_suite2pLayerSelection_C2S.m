@@ -19,9 +19,7 @@ if DD_value ~= 1
             'String',strcat('Selected layer:',{' '},num2str(d.layers.currentLayer)));
 
         d = ToError_C2S(d, "No errors");
-        set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
-            'ForegroundColor',[0.64 0.08 0.18]);
-        d = ToLog(d, "Layer successfully selected");
+        d = ToLog_C2S(d, "Layer successfully selected");
 
         childrenArray = GUI_childrenFinder_C2S(d,'Suite2p Fall.mat file','FallSelectionPB');
         set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'on');
@@ -30,9 +28,7 @@ if DD_value ~= 1
         if ismember(d.layers.analyzedLayers,d.layers.currentLayer) ~= 1 %means layer not yet analyzed
             d.layers.currentLayer = DD_value - 1;
             d = ToError_C2S(d, " No errors");
-            set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
-                'ForegroundColor',[0.64 0.08 0.18]);
-            d = ToLog(d, "Layer successfully selected");
+            d = ToLog_C2S(d, "Layer successfully selected");
 
             %update layer selection checkmark color
             childrenArray = GUI_childrenFinder_C2S(d,'Layer selection','LayerSelectionCheckmark');
@@ -42,11 +38,6 @@ if DD_value ~= 1
             childrenArray = GUI_childrenFinder_C2S(d,'Layer selection','CurrentLayerTB');
             set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
                 'String',strcat('Selected layer:',{' '},num2str(d.layers.currentLayer)));
-
-            d = ToError_C2S(d, " No errors");
-            set(d.GUI.errorConsole, 'String', d.errors.latestReturned,...
-                'ForegroundColor',[0.64 0.08 0.18]);
-            d = ToLog(d, "Layer successfully selected");
 
             %enable the Fall selection PB
             childrenArray = GUI_childrenFinder_C2S(d,'Suite2p Fall.mat file','FallSelectionPB');
@@ -69,6 +60,7 @@ if DD_value ~= 1
 
         else %means layer is already analyzed
             d = ToError_C2S(d, "Layer already analyzed!!");
+            d = ToLog_C2S(d, "An error occured!!!");
             %pop-up msgbox
             beep;
             CustomMsgBox_C2S('Layer already analyzed!');
@@ -132,7 +124,8 @@ if DD_value ~= 1
         end
     end
 else %user selected the incorrect DD option ('Select layer')
-    d = ToError_C2S(d, "Please select a correct layer!");
+    d = ToError_C2S(d, "Please select a correct layer.");
+    d = ToLog_C2S(d, "An error occured!!!");
     %pop-up msgbox
     beep;
     CustomMsgBox_C2S('Please select a correct layer!');

@@ -313,11 +313,13 @@ set(EB(2), 'String', '0');
 set(EB(2), 'Position', [0.01,0.62,0.05,0.25]);
 set(EB(2), 'Enable', 'off');
 set(EB(2), 'Tag', 'SetOASISthresholdEB');
+set(EB(2), 'Callback', @callback_OASISeditbox_C2S);
 
 generalTB(14) = GenericTextBox_C2S(AnalysisUIGroup);
-set(generalTB(14), 'String', sprintf('Set OASIS threshold\n(default 0)'));
+set(generalTB(14), 'String', sprintf('Set OASIS threshold\n(default 0,\nmust be <0.5)'));
 set(generalTB(14), 'HorizontalAlignment', 'Left');
-set(generalTB(14), 'Position', [0.07,0.61,0.1,0.25]);
+set(generalTB(14), 'FontSize', 9);
+set(generalTB(14), 'Position', [0.07,0.61,0.1,0.3]);
 set(generalTB(14), 'Enable', 'off');
 set(generalTB(14), 'Tag', 'SetOASISthresholdTB');
 
