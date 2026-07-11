@@ -144,7 +144,7 @@ UISet_C2S(generalTB(4), 'Tag', 'MEScFileLocationPathTB');
 
 %reference MESc unit for calculation
 generalTB(20) = GenericTextBox(MEScUIGroup);
-UISet_C2S(generalTB(20), 'Position', [0.775,0.85,0.974271012006861,0.143708145927016]);
+UISet_C2S(generalTB(20), 'Position', [0.72,0.57,0.974271012006861,0.143708145927016]);
 UISet_C2S(generalTB(20), 'String', 'Ref. measurement unit');
 UISet_C2S(generalTB(20), 'HorizontalAlignment', 'left');
 UISet_C2S(generalTB(20), 'ForeGroundColor', [0.4 0.4 0.4]);
@@ -154,7 +154,7 @@ UISet_C2S(generalTB(20), 'Tag', 'MEScRefUnitTB');
 %MESc ref. unit selection editable textbox
 EB(1) = GenericEditBox(MEScUIGroup);
 UISet_C2S(EB(1), 'String', '50');
-UISet_C2S(EB(1), 'Position', [0.93,0.7,0.05,0.15]);
+UISet_C2S(EB(1), 'Position', [0.94,0.6,0.05,0.15]);
 UISet_C2S(EB(1), 'Enable', 'off');
 UISet_C2S(EB(1), 'Tag', 'SetMEScRefUnitEB');
 UISet_C2S(EB(1), 'TooltipString', ['Enter the unit number recorded in MESC ' ...
@@ -455,14 +455,11 @@ UISet_C2S(generalTB(17), 'ForeGroundColor', [0.4 0.4 0.4]);
 UISet_C2S(generalTB(17), 'BackGroundColor', [0.75 0.75 0.75]);
 UISet_C2S(generalTB(17), 'Tag', 'DffSavedUnitsTB');
 
-% - 3c.i. Run analysis button
+% - 4. Restart GUI PB
 PB(6) = GenericPushButton(figureCalcium2Spike_GUI);
 UISet_C2S(PB(6), 'String', 'Restart GUI');
 UISet_C2S(PB(6), 'Position', [0.895,0.028,0.08,0.055]);
 UISet_C2S(PB(6), 'Tag', 'RestartGuiPB');
 UISet_C2S(PB(6), 'Callback', @callback_resetCalcium2Spike_GUI_v3);
-
-% InformationPanel_C2S(figureCalcium2Spike_GUI);
-% ValuesHandle = DrawValues_C2S();
 
 aa=[];

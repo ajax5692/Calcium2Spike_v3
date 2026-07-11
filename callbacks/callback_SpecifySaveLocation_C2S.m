@@ -101,7 +101,7 @@ try
         %reset current layer TB
         childrenArray = GUI_childrenFinder_C2S(d,'Layer selection','CurrentLayerTB');
         set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
-            'Selected layer: --');saveLocationTB
+            'Selected layer: --');
         %reset analyzed layer TB
         childrenArray = GUI_childrenFinder_C2S(d,'Layer selection','AnalyzedLayerTB');
         set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...

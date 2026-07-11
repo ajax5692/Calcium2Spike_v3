@@ -75,10 +75,10 @@ elseif ismember(d.layers.analyzedLayers,d.layers.currentLayer) ~= 1 %means gui a
     childrenArray = GUI_childrenFinder_C2S(d,'CoreAnalysis','RunAnalysisPB');
     set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'BackgroundColor', [1 1 1],...
         'FontWeight', 'bold','ForegroundColor', [1 0 0], 'FontSize', 12, 'String', 'Analyzing');
-
     gif = sprintf(['<html><img src="file:/%s\\Spinner@1x-1.0s-50px-50px.gif" ' 'width="40" height="40"></html>'], pwd);
-    loadingGraphics = uicontrol('style','push', 'pos',[540 168 40 40], 'String',gif,'enable','inactive','CData',uint8(255*ones(40,40,3)));
-
+    %use an inactive (not disabled) pushbutton to display the gif. Use CData instead of background color to flatten.
+    loadingGraphics = uicontrol('style','push', 'pos',[460 187 40 40], 'String',gif,'enable','inactive','CData',...
+        uint8(255*ones(40,40,3)*0.75));
     pause(0.5);
     UpdateProgressbar(d,'progressbar_primary', [0 0 1], 1/totalAnalysisSteps);
 

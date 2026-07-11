@@ -51,6 +51,16 @@ if DD_value ~= 1
             childrenArray = GUI_childrenFinder_C2S(d,'Suite2p Fall.mat file','FallSelectionPB');
             set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'on');
 
+            %disable run analysis PB
+            childrenArray = GUI_childrenFinder_C2S(d,'CoreAnalysis','RunAnalysisPB');
+            set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off',...
+                'BackgroundColor', 'w', 'ForegroundColor', 'k', 'FontWeight', 'normal', 'FontSize', 10,...
+                'String','Run analysis');
+
+            %reset primary and secondary progress bar
+            UpdateProgressbar(d,'progressbar_primary', [0 0 1], 0);
+            UpdateProgressbar(d,'progressbar_secondary', [0 0 1], 0);
+
         else %means layer is already analyzed
             d = ToError(d, "Layer already analyzed!!");
             %pop-up msgbox
@@ -96,8 +106,7 @@ if DD_value ~= 1
             %disable run analysis PB
             childrenArray = GUI_childrenFinder_C2S(d,'CoreAnalysis','RunAnalysisPB');
             set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off',...
-                'BackgroundColor', 'w', 'ForegroundColor', 'k', 'FontWeight', 'normal', 'FontWeight',...
-                'normal', 'FontSize', 10);
+                'BackgroundColor', 'w', 'ForegroundColor', 'k', 'FontWeight', 'normal', 'FontSize', 10);
             % - reset the analysis output space card
             %df/f count
             childrenArray = GUI_childrenFinder_C2S(d,'Analysis Output','DffCountTB');
@@ -111,6 +120,9 @@ if DD_value ~= 1
             childrenArray = GUI_childrenFinder_C2S(d,'Analysis Output','DffSavedUnitsTB');
             set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
                 'Final number of neurons for which ΔF/F saved:');
+            %reset primary and secondary progress bar
+            UpdateProgressbar(d,'progressbar_primary', [0 0 1], 0);
+            UpdateProgressbar(d,'progressbar_secondary', [0 0 1], 0);
         end
     end
 else %user selected the incorrect DD option ('Select layer')
