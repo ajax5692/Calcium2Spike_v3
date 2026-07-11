@@ -61,7 +61,11 @@ try
         childrenArray = GUI_childrenFinder_C2S(d,'Analysis Output','DffSavedUnitsTB');
         set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
             'Final number of neurons for which ΔF/F saved:');
-    else
+        %reset primary and secondary progress bar
+        UpdateProgressbar(d,'progressbar_primary', [0 0 1], 0);
+        UpdateProgressbar(d,'progressbar_secondary', [0 0 1], 0);
+    
+    else %this means correct Fall.mat file is loaded
         %if Fall file is selected, load the Fall.mat temporarily
         if fileName ~= 0
             d.FallDataPath = FallDataLocation;
@@ -115,6 +119,9 @@ try
             childrenArray = GUI_childrenFinder_C2S(d,'CoreAnalysis','RunAnalysisPB');
             set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'on',...
                 'BackgroundColor', [0.6 1 0.6], 'ForegroundColor', 'k', 'FontWeight', 'bold', 'FontSize', 11);
+            %reset primary and secondary progress bar
+            UpdateProgressbar(d,'progressbar_primary', [0 0 1], 0);
+            UpdateProgressbar(d,'progressbar_secondary', [0 0 1], 0);
 
             delete(loadingGraphics)
 
@@ -164,6 +171,9 @@ try
             childrenArray = GUI_childrenFinder_C2S(d,'Analysis Output','DffSavedUnitsTB');
             set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
                 'Final number of neurons for which ΔF/F saved:');
+            %reset primary and secondary progress bar
+            UpdateProgressbar(d,'progressbar_primary', [0 0 1], 0);
+            UpdateProgressbar(d,'progressbar_secondary', [0 0 1], 0);
 
         end
 
@@ -215,6 +225,9 @@ catch
     childrenArray = GUI_childrenFinder_C2S(d,'Analysis Output','DffSavedUnitsTB');
     set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
         'Final number of neurons for which ΔF/F saved:');
+    %reset primary and secondary progress bar
+    UpdateProgressbar(d,'progressbar_primary', [0 0 1], 0);
+    UpdateProgressbar(d,'progressbar_secondary', [0 0 1], 0);
 
 end
 

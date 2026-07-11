@@ -160,6 +160,9 @@ else
         childrenArray = GUI_childrenFinder_C2S(d,'Analysis Output','DffSavedUnitsTB');
         set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', ...
             'Final number of neurons for which ΔF/F saved:');
+        %reset primary and secondary progress bar
+        UpdateProgressbar(d,'progressbar_primary', [0 0 1], 0);
+        UpdateProgressbar(d,'progressbar_secondary', [0 0 1], 0);
 end
 
 guidata(d.source, d);
