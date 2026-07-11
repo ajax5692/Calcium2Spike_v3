@@ -37,8 +37,6 @@ save('layerWiseData.mat','layerWiseData','dateTimeStamp')
 save('stackedlayerData.mat','stackedLayerData','dateTimeStamp')
 cd(d.originalCodePath)
 
-childrenArray = GUI_childrenFinder_C2S(d,'Layer-wise analysis','PoolData');
-UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'BackgroundColor', [0 1 1]);
-UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'ForegroundColor', [0 0 0]);
-UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'String', 'Data Pooled');
-UISet_C2S(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off');
+childrenArray = GUI_childrenFinder_C2S(d,'Analysis','PoolDataPB');
+set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'BackgroundColor', [0 1 1],...
+    'ForegroundColor', [0 0 0], 'String', 'Data Pooled', 'Enable', 'off');

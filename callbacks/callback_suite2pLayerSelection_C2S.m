@@ -48,6 +48,7 @@ if DD_value ~= 1
                 'ForegroundColor',[0.64 0.08 0.18]);
             d = ToLog(d, "Layer successfully selected");
 
+            %enable the Fall selection PB
             childrenArray = GUI_childrenFinder_C2S(d,'Suite2p Fall.mat file','FallSelectionPB');
             set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'on');
 
@@ -56,6 +57,11 @@ if DD_value ~= 1
             set(d.source.Children(childrenArray(1)).Children(childrenArray(2)), 'Enable', 'off',...
                 'BackgroundColor', 'w', 'ForegroundColor', 'k', 'FontWeight', 'normal', 'FontSize', 10,...
                 'String','Run analysis');
+
+            %update Fall.mat file selection checkmark color
+            childrenArray = GUI_childrenFinder_C2S(d,'Suite2p Fall.mat file','FallCheckmark');
+            set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
+                'ForegroundColor',[0.9 0.3 0.3]);
 
             %reset primary and secondary progress bar
             UpdateProgressbar(d,'progressbar_primary', [0 0 1], 0);
@@ -69,7 +75,7 @@ if DD_value ~= 1
             %update layer selection checkmark color
             childrenArray = GUI_childrenFinder_C2S(d,'Layer selection','LayerSelectionCheckmark');
             set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
-                'ForegroundColor',[[0.9 0.3 0.3]]);
+                'ForegroundColor',[0.9 0.3 0.3]);
             %update current layer TB
             childrenArray = GUI_childrenFinder_C2S(d,'Layer selection','CurrentLayerTB');
             set(d.source.Children(childrenArray(1)).Children(childrenArray(2)),...
