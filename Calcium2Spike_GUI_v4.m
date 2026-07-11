@@ -1,4 +1,4 @@
-function Calcium2Spike_GUI_v3
+function Calcium2Spike_GUI_v4
 
 p = mfilename('fullpath');
 [coreProcessorfileLocation,nameOfFile] = fileparts(p);
