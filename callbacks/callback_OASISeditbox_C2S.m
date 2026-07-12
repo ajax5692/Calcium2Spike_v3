@@ -13,5 +13,11 @@ function callback_OASISeditbo_C2S(hObject, eventdata, handles)
         CustomMsgBox_C2S(sprintf('OASIS thresold value too high!\nReverting to 0.'));
         %revert the text box to default
         set(hObject, 'String', num2str(0));
+    elseif inputValue < 0
+        %pop-up msgbox
+        beep;
+        CustomMsgBox_C2S(sprintf('OASIS thresold cannot be\nnegative. Reverting to 0.'));
+        %revert the text box to default
+        set(hObject, 'String', num2str(0));
     end
 end
